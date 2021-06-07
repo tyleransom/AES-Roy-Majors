@@ -1,0 +1,1170 @@
+
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> # Remove everything from the environment and clear out memories
+> rm(list = ls())
+> gc()
+          used (Mb) gc trigger   (Mb)  max used   (Mb)
+Ncells 1383104 73.9    3592844  191.9   1973204  105.4
+Vcells 2533426 19.4  305668261 2332.1 366093990 2793.1
+> 
+> require(xtable)
+Loading required package: xtable
+> 
+> # Load baseline results (iid taste shocks, bin quartiles for occupation excl. restr.)
+> load('coeffs.Rda')
+> load('Ns.Rda')
+> load('fits.Rda')
+> load('RMSEs.Rda')
+> 
+> print(" ")
+[1] " "
+> print("iid tastes, quartiles")
+[1] "iid tastes, quartiles"
+> print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :1.567   Min.   :1.885   Min.   :1.896   Min.   :2.066  
+ 1st Qu.:1.595   1st Qu.:1.937   1st Qu.:1.937   1st Qu.:2.123  
+ Median :1.621   Median :1.956   Median :1.961   Median :2.146  
+ Mean   :1.622   Mean   :1.959   Mean   :1.959   Mean   :2.146  
+ 3rd Qu.:1.647   3rd Qu.:1.981   3rd Qu.:1.978   3rd Qu.:2.167  
+ Max.   :1.687   Max.   :2.031   Max.   :2.043   Max.   :2.227  
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :1.766   Min.   :1.862   Min.   :1.882   Min.   :2.054  
+ 1st Qu.:1.825   1st Qu.:1.919   1st Qu.:1.928   1st Qu.:2.126  
+ Median :1.849   Median :1.937   Median :1.955   Median :2.147  
+ Mean   :1.851   Mean   :1.941   Mean   :1.951   Mean   :2.152  
+ 3rd Qu.:1.874   3rd Qu.:1.966   3rd Qu.:1.971   3rd Qu.:2.179  
+ Max.   :1.936   Max.   :2.030   Max.   :2.043   Max.   :2.260  
+  binRough2B3   
+ Min.   :1.333  
+ 1st Qu.:1.545  
+ Median :1.618  
+ Mean   :1.619  
+ 3rd Qu.:1.694  
+ Max.   :1.989  
+> print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :28170   Min.   :28170   Min.   :28170   Min.   :28170  
+ 1st Qu.:28392   1st Qu.:28392   1st Qu.:28392   1st Qu.:28392  
+ Median :28505   Median :28505   Median :28505   Median :28505  
+ Mean   :28502   Mean   :28502   Mean   :28502   Mean   :28502  
+ 3rd Qu.:28606   3rd Qu.:28606   3rd Qu.:28606   3rd Qu.:28606  
+ Max.   :28901   Max.   :28901   Max.   :28901   Max.   :28901  
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :28170   Min.   :28170   Min.   :28170   Min.   :28170  
+ 1st Qu.:28392   1st Qu.:28392   1st Qu.:28392   1st Qu.:28392  
+ Median :28505   Median :28505   Median :28505   Median :28505  
+ Mean   :28502   Mean   :28502   Mean   :28502   Mean   :28502  
+ 3rd Qu.:28606   3rd Qu.:28606   3rd Qu.:28606   3rd Qu.:28606  
+ Max.   :28901   Max.   :28901   Max.   :28901   Max.   :28901  
+  binRough2B3   
+ Min.   :28170  
+ 1st Qu.:28392  
+ Median :28505  
+ Mean   :28502  
+ 3rd Qu.:28606  
+ Max.   :28901  
+> print(summary(fits))
+  AccuracyBin        KappaBin       AccuracyTree      KappaTree     
+ Min.   :0.3464   Min.   :0.2784   Min.   :0.4802   Min.   :0.4359  
+ 1st Qu.:0.3476   1st Qu.:0.2795   1st Qu.:0.4818   1st Qu.:0.4375  
+ Median :0.3482   Median :0.2801   Median :0.4830   Median :0.4388  
+ Mean   :0.3482   Mean   :0.2802   Mean   :0.4828   Mean   :0.4386  
+ 3rd Qu.:0.3486   3rd Qu.:0.2810   3rd Qu.:0.4836   3rd Qu.:0.4395  
+ Max.   :0.3503   Max.   :0.2829   Max.   :0.4857   Max.   :0.4420  
+ AccuracyLogit      KappaLogit     AccuracybinRough KappabinRough
+ Min.   :0.4756   Min.   :0.4299   Min.   :0        Min.   :0    
+ 1st Qu.:0.4774   1st Qu.:0.4316   1st Qu.:0        1st Qu.:0    
+ Median :0.4781   Median :0.4325   Median :0        Median :0    
+ Mean   :0.4780   Mean   :0.4323   Mean   :0        Mean   :0    
+ 3rd Qu.:0.4786   3rd Qu.:0.4329   3rd Qu.:0        3rd Qu.:0    
+ Max.   :0.4799   Max.   :0.4343   Max.   :0        Max.   :0    
+> print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS             bin1B3          tree1B3          logit1B3     
+ Min.   :0.8899   Min.   :0.8637   Min.   :0.8606   Min.   :0.8594  
+ 1st Qu.:0.8965   1st Qu.:0.8699   1st Qu.:0.8676   1st Qu.:0.8659  
+ Median :0.8994   Median :0.8727   Median :0.8703   Median :0.8690  
+ Mean   :0.8994   Mean   :0.8726   Mean   :0.8704   Mean   :0.8687  
+ 3rd Qu.:0.9027   3rd Qu.:0.8754   3rd Qu.:0.8734   3rd Qu.:0.8713  
+ Max.   :0.9098   Max.   :0.8826   Max.   :0.8808   Max.   :0.8792  
+  binRough1B3         bin2B3          tree2B3          logit2B3     
+ Min.   :0.8869   Min.   :0.8633   Min.   :0.8606   Min.   :0.8591  
+ 1st Qu.:0.8930   1st Qu.:0.8694   1st Qu.:0.8674   1st Qu.:0.8656  
+ Median :0.8959   Median :0.8723   Median :0.8702   Median :0.8687  
+ Mean   :0.8959   Mean   :0.8723   Mean   :0.8702   Mean   :0.8684  
+ 3rd Qu.:0.8989   3rd Qu.:0.8752   3rd Qu.:0.8731   3rd Qu.:0.8710  
+ Max.   :0.9057   Max.   :0.8823   Max.   :0.8809   Max.   :0.8791  
+  binRough2B3    
+ Min.   :0.8856  
+ 1st Qu.:0.8918  
+ Median :0.8944  
+ Mean   :0.8944  
+ 3rd Qu.:0.8971  
+ Max.   :0.9042  
+> 
+> # # Load median results (iid taste shocks, bin two-iles for occupation excl. restr.)
+> # load('coeffsMed.Rda')
+> # load('NsMed.Rda')
+> # load('fitsMed.Rda')
+> # load('RMSEsMed.Rda')
+> 
+> # print(" ")
+> # print("iid tastes, two-iles")
+> # print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(fits))
+> # print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> 
+> # Load mvn results (bin quartiles for occupation excl. restr.)
+> load('coeffsCorrEps.Rda')
+> load('NsCorrEps.Rda')
+> load('fitsCorrEps.Rda')
+> load('RMSEsCorrEps.Rda')
+> 
+> print(" ")
+[1] " "
+> print("corr tastes, quartiles")
+[1] "corr tastes, quartiles"
+> print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :1.588   Min.   :1.877   Min.   :1.864   Min.   :2.005  
+ 1st Qu.:1.640   1st Qu.:1.943   1st Qu.:1.940   1st Qu.:2.093  
+ Median :1.655   Median :1.961   Median :1.960   Median :2.116  
+ Mean   :1.660   Mean   :1.962   Mean   :1.959   Mean   :2.115  
+ 3rd Qu.:1.676   3rd Qu.:1.980   3rd Qu.:1.977   3rd Qu.:2.136  
+ Max.   :1.748   Max.   :2.058   Max.   :2.048   Max.   :2.222  
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :1.798   Min.   :1.852   Min.   :1.853   Min.   :1.996  
+ 1st Qu.:1.856   1st Qu.:1.920   1st Qu.:1.927   1st Qu.:2.082  
+ Median :1.884   Median :1.948   Median :1.947   Median :2.118  
+ Mean   :1.882   Mean   :1.945   Mean   :1.947   Mean   :2.113  
+ 3rd Qu.:1.908   3rd Qu.:1.972   3rd Qu.:1.969   3rd Qu.:2.150  
+ Max.   :2.007   Max.   :2.050   Max.   :2.021   Max.   :2.210  
+  binRough2B3   
+ Min.   :1.392  
+ 1st Qu.:1.592  
+ Median :1.670  
+ Mean   :1.674  
+ 3rd Qu.:1.736  
+ Max.   :1.941  
+> print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :27096   Min.   :27096   Min.   :27096   Min.   :27096  
+ 1st Qu.:27404   1st Qu.:27404   1st Qu.:27404   1st Qu.:27404  
+ Median :27488   Median :27488   Median :27488   Median :27488  
+ Mean   :27504   Mean   :27504   Mean   :27504   Mean   :27504  
+ 3rd Qu.:27586   3rd Qu.:27586   3rd Qu.:27586   3rd Qu.:27586  
+ Max.   :27924   Max.   :27924   Max.   :27924   Max.   :27924  
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :27096   Min.   :27096   Min.   :27096   Min.   :27096  
+ 1st Qu.:27404   1st Qu.:27404   1st Qu.:27404   1st Qu.:27404  
+ Median :27488   Median :27488   Median :27488   Median :27488  
+ Mean   :27504   Mean   :27504   Mean   :27504   Mean   :27504  
+ 3rd Qu.:27586   3rd Qu.:27586   3rd Qu.:27586   3rd Qu.:27586  
+ Max.   :27924   Max.   :27924   Max.   :27924   Max.   :27924  
+  binRough2B3   
+ Min.   :27096  
+ 1st Qu.:27404  
+ Median :27488  
+ Mean   :27504  
+ 3rd Qu.:27586  
+ Max.   :27924  
+> print(summary(fits))
+  AccuracyBin        KappaBin       AccuracyTree      KappaTree     
+ Min.   :0.3265   Min.   :0.2587   Min.   :0.4447   Min.   :0.3992  
+ 1st Qu.:0.3290   1st Qu.:0.2622   1st Qu.:0.4483   1st Qu.:0.4028  
+ Median :0.3300   Median :0.2633   Median :0.4495   Median :0.4039  
+ Mean   :0.3299   Mean   :0.2631   Mean   :0.4497   Mean   :0.4042  
+ 3rd Qu.:0.3309   3rd Qu.:0.2640   3rd Qu.:0.4511   3rd Qu.:0.4056  
+ Max.   :0.3329   Max.   :0.2662   Max.   :0.4553   Max.   :0.4101  
+ AccuracyLogit      KappaLogit     AccuracybinRough KappabinRough
+ Min.   :0.4408   Min.   :0.3938   Min.   :0        Min.   :0    
+ 1st Qu.:0.4443   1st Qu.:0.3973   1st Qu.:0        1st Qu.:0    
+ Median :0.4456   Median :0.3988   Median :0        Median :0    
+ Mean   :0.4456   Mean   :0.3988   Mean   :0        Mean   :0    
+ 3rd Qu.:0.4470   3rd Qu.:0.4001   3rd Qu.:0        3rd Qu.:0    
+ Max.   :0.4509   Max.   :0.4042   Max.   :0        Max.   :0    
+> print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS             bin1B3          tree1B3          logit1B3     
+ Min.   :0.8996   Min.   :0.8827   Min.   :0.8814   Min.   :0.8805  
+ 1st Qu.:0.9098   1st Qu.:0.8904   1st Qu.:0.8891   1st Qu.:0.8878  
+ Median :0.9122   Median :0.8926   Median :0.8914   Median :0.8901  
+ Mean   :0.9123   Mean   :0.8929   Mean   :0.8916   Mean   :0.8903  
+ 3rd Qu.:0.9152   3rd Qu.:0.8956   3rd Qu.:0.8944   3rd Qu.:0.8929  
+ Max.   :0.9228   Max.   :0.9050   Max.   :0.9042   Max.   :0.9021  
+  binRough1B3         bin2B3          tree2B3          logit2B3     
+ Min.   :0.8970   Min.   :0.8824   Min.   :0.8810   Min.   :0.8802  
+ 1st Qu.:0.9071   1st Qu.:0.8901   1st Qu.:0.8888   1st Qu.:0.8876  
+ Median :0.9094   Median :0.8924   Median :0.8911   Median :0.8899  
+ Mean   :0.9095   Mean   :0.8927   Mean   :0.8914   Mean   :0.8901  
+ 3rd Qu.:0.9124   3rd Qu.:0.8955   3rd Qu.:0.8943   3rd Qu.:0.8928  
+ Max.   :0.9198   Max.   :0.9048   Max.   :0.9040   Max.   :0.9019  
+  binRough2B3    
+ Min.   :0.8964  
+ 1st Qu.:0.9062  
+ Median :0.9083  
+ Mean   :0.9085  
+ 3rd Qu.:0.9113  
+ Max.   :0.9194  
+> 
+> # # Load mvn median results (bin two-iles for occupation excl. restr.)
+> # load('coeffsMedCorrEps.Rda')
+> # load('NsMedCorrEps.Rda')
+> # load('fitsMedCorrEps.Rda')
+> # load('RMSEsMedCorrEps.Rda')
+> 
+> # print(" ")
+> # print("corr tastes, two-iles")
+> # print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(fits))
+> # print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> 
+> # Load baseline results (iid taste shocks, bin quartiles for occupation excl. restr.)
+> load('coeffs1e3.Rda')
+> load('Ns1e3.Rda')
+> load('fits1e3.Rda')
+> load('RMSEs1e3.Rda')
+> 
+> print(" ")
+[1] " "
+> print("iid tastes, quartiles")
+[1] "iid tastes, quartiles"
+> print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :1.388   Min.   :1.714   Min.   :1.805   Min.   :1.899  
+ 1st Qu.:1.563   1st Qu.:1.862   1st Qu.:1.973   1st Qu.:2.081  
+ Median :1.611   Median :1.927   Median :2.028   Median :2.148  
+ Mean   :1.618   Mean   :1.928   Mean   :2.026   Mean   :2.140  
+ 3rd Qu.:1.688   3rd Qu.:1.982   3rd Qu.:2.074   3rd Qu.:2.206  
+ Max.   :1.893   Max.   :2.306   Max.   :2.368   Max.   :2.547  
+ NA's   :23      NA's   :23      NA's   :23      NA's   :23     
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :1.587   Min.   :1.675   Min.   :1.724   Min.   :1.830  
+ 1st Qu.:1.781   1st Qu.:1.836   1st Qu.:1.936   1st Qu.:2.085  
+ Median :1.827   Median :1.903   Median :2.014   Median :2.178  
+ Mean   :1.839   Mean   :1.908   Mean   :2.012   Mean   :2.173  
+ 3rd Qu.:1.891   3rd Qu.:1.976   3rd Qu.:2.074   3rd Qu.:2.249  
+ Max.   :2.132   Max.   :2.226   Max.   :2.271   Max.   :2.538  
+ NA's   :23      NA's   :23      NA's   :23      NA's   :23     
+  binRough2B3    
+ Min.   :0.9993  
+ 1st Qu.:1.5762  
+ Median :1.7636  
+ Mean   :1.7443  
+ 3rd Qu.:1.8877  
+ Max.   :2.4583  
+ NA's   :23      
+> print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS           bin1B3        tree1B3        logit1B3     binRough1B3  
+ Min.   :2728   Min.   :2728   Min.   :2728   Min.   :2728   Min.   :2728  
+ 1st Qu.:2815   1st Qu.:2815   1st Qu.:2815   1st Qu.:2815   1st Qu.:2815  
+ Median :2845   Median :2845   Median :2845   Median :2845   Median :2845  
+ Mean   :2857   Mean   :2857   Mean   :2857   Mean   :2857   Mean   :2857  
+ 3rd Qu.:2893   3rd Qu.:2893   3rd Qu.:2893   3rd Qu.:2893   3rd Qu.:2893  
+ Max.   :3017   Max.   :3017   Max.   :3017   Max.   :3017   Max.   :3017  
+ NA's   :23     NA's   :23     NA's   :23     NA's   :23     NA's   :23    
+     bin2B3        tree2B3        logit2B3     binRough2B3  
+ Min.   :2728   Min.   :2728   Min.   :2728   Min.   :2728  
+ 1st Qu.:2815   1st Qu.:2815   1st Qu.:2815   1st Qu.:2815  
+ Median :2845   Median :2845   Median :2845   Median :2845  
+ Mean   :2857   Mean   :2857   Mean   :2857   Mean   :2857  
+ 3rd Qu.:2893   3rd Qu.:2893   3rd Qu.:2893   3rd Qu.:2893  
+ Max.   :3017   Max.   :3017   Max.   :3017   Max.   :3017  
+ NA's   :23     NA's   :23     NA's   :23     NA's   :23    
+> print(summary(fits))
+  AccuracyBin        KappaBin       AccuracyTree      KappaTree     
+ Min.   :0.3441   Min.   :0.2754   Min.   :0.4766   Min.   :0.4321  
+ 1st Qu.:0.3489   1st Qu.:0.2817   1st Qu.:0.4803   1st Qu.:0.4357  
+ Median :0.3503   Median :0.2834   Median :0.4821   Median :0.4379  
+ Mean   :0.3505   Mean   :0.2835   Mean   :0.4824   Mean   :0.4379  
+ 3rd Qu.:0.3525   3rd Qu.:0.2852   3rd Qu.:0.4844   3rd Qu.:0.4400  
+ Max.   :0.3584   Max.   :0.2920   Max.   :0.4889   Max.   :0.4449  
+ NA's   :23       NA's   :23       NA's   :23       NA's   :23      
+ AccuracyLogit      KappaLogit     AccuracybinRough KappabinRough
+ Min.   :0.4727   Min.   :0.4269   Min.   :0        Min.   :0    
+ 1st Qu.:0.4777   1st Qu.:0.4320   1st Qu.:0        1st Qu.:0    
+ Median :0.4793   Median :0.4336   Median :0        Median :0    
+ Mean   :0.4795   Mean   :0.4338   Mean   :0        Mean   :0    
+ 3rd Qu.:0.4809   3rd Qu.:0.4352   3rd Qu.:0        3rd Qu.:0    
+ Max.   :0.4864   Max.   :0.4410   Max.   :0        Max.   :0    
+ NA's   :23       NA's   :23       NA's   :23       NA's   :23   
+> print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS             bin1B3          tree1B3          logit1B3     
+ Min.   :0.8730   Min.   :0.8488   Min.   :0.8501   Min.   :0.8427  
+ 1st Qu.:0.8907   1st Qu.:0.8655   1st Qu.:0.8649   1st Qu.:0.8608  
+ Median :0.8966   Median :0.8726   Median :0.8729   Median :0.8688  
+ Mean   :0.8974   Mean   :0.8724   Mean   :0.8721   Mean   :0.8675  
+ 3rd Qu.:0.9031   3rd Qu.:0.8780   3rd Qu.:0.8777   3rd Qu.:0.8736  
+ Max.   :0.9356   Max.   :0.9031   Max.   :0.9008   Max.   :0.8977  
+ NA's   :23       NA's   :23       NA's   :23       NA's   :23      
+  binRough1B3         bin2B3          tree2B3          logit2B3     
+ Min.   :0.8704   Min.   :0.8485   Min.   :0.8504   Min.   :0.8436  
+ 1st Qu.:0.8876   1st Qu.:0.8652   1st Qu.:0.8645   1st Qu.:0.8602  
+ Median :0.8933   Median :0.8725   Median :0.8726   Median :0.8680  
+ Mean   :0.8942   Mean   :0.8720   Mean   :0.8716   Mean   :0.8673  
+ 3rd Qu.:0.8995   3rd Qu.:0.8774   3rd Qu.:0.8770   3rd Qu.:0.8728  
+ Max.   :0.9316   Max.   :0.9031   Max.   :0.9008   Max.   :0.8969  
+ NA's   :23       NA's   :23       NA's   :23       NA's   :23      
+  binRough2B3    
+ Min.   :0.8685  
+ 1st Qu.:0.8871  
+ Median :0.8925  
+ Mean   :0.8931  
+ 3rd Qu.:0.8989  
+ Max.   :0.9310  
+ NA's   :23      
+> 
+> # # Load median results (iid taste shocks, bin two-iles for occupation excl. restr.)
+> # load('coeffs1e3Med.Rda')
+> # load('Ns1e3Med.Rda')
+> # load('fits1e3Med.Rda')
+> # load('RMSEs1e3Med.Rda')
+> 
+> # print(" ")
+> # print("iid tastes, two-iles")
+> # print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(fits))
+> # print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> 
+> # Load mvn results (bin quartiles for occupation excl. restr.)
+> load('coeffs1e3CorrEps.Rda')
+> load('Ns1e3CorrEps.Rda')
+> load('fits1e3CorrEps.Rda')
+> load('RMSEs1e3CorrEps.Rda')
+> 
+> print(" ")
+[1] " "
+> print("corr tastes, quartiles")
+[1] "corr tastes, quartiles"
+> print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :1.504   Min.   :1.749   Min.   :1.805   Min.   :1.901  
+ 1st Qu.:1.630   1st Qu.:1.910   1st Qu.:1.970   1st Qu.:2.075  
+ Median :1.694   Median :1.948   Median :2.020   Median :2.143  
+ Mean   :1.694   Mean   :1.958   Mean   :2.027   Mean   :2.141  
+ 3rd Qu.:1.754   3rd Qu.:2.010   3rd Qu.:2.079   3rd Qu.:2.186  
+ Max.   :1.914   Max.   :2.184   Max.   :2.218   Max.   :2.364  
+ NA's   :11      NA's   :11      NA's   :11      NA's   :11     
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :1.675   Min.   :1.702   Min.   :1.742   Min.   :1.904  
+ 1st Qu.:1.835   1st Qu.:1.884   1st Qu.:1.955   1st Qu.:2.073  
+ Median :1.904   Median :1.943   Median :2.010   Median :2.144  
+ Mean   :1.900   Mean   :1.947   Mean   :2.010   Mean   :2.162  
+ 3rd Qu.:1.963   3rd Qu.:2.021   3rd Qu.:2.083   3rd Qu.:2.254  
+ Max.   :2.170   Max.   :2.214   Max.   :2.308   Max.   :2.482  
+ NA's   :11      NA's   :11      NA's   :11      NA's   :11     
+  binRough2B3   
+ Min.   :1.167  
+ 1st Qu.:1.593  
+ Median :1.852  
+ Mean   :1.806  
+ 3rd Qu.:1.992  
+ Max.   :2.544  
+ NA's   :11     
+> print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS           bin1B3        tree1B3        logit1B3     binRough1B3  
+ Min.   :2626   Min.   :2626   Min.   :2626   Min.   :2626   Min.   :2626  
+ 1st Qu.:2719   1st Qu.:2719   1st Qu.:2719   1st Qu.:2719   1st Qu.:2719  
+ Median :2757   Median :2757   Median :2757   Median :2757   Median :2757  
+ Mean   :2755   Mean   :2755   Mean   :2755   Mean   :2755   Mean   :2755  
+ 3rd Qu.:2788   3rd Qu.:2788   3rd Qu.:2788   3rd Qu.:2788   3rd Qu.:2788  
+ Max.   :2874   Max.   :2874   Max.   :2874   Max.   :2874   Max.   :2874  
+ NA's   :11     NA's   :11     NA's   :11     NA's   :11     NA's   :11    
+     bin2B3        tree2B3        logit2B3     binRough2B3  
+ Min.   :2626   Min.   :2626   Min.   :2626   Min.   :2626  
+ 1st Qu.:2719   1st Qu.:2719   1st Qu.:2719   1st Qu.:2719  
+ Median :2757   Median :2757   Median :2757   Median :2757  
+ Mean   :2755   Mean   :2755   Mean   :2755   Mean   :2755  
+ 3rd Qu.:2788   3rd Qu.:2788   3rd Qu.:2788   3rd Qu.:2788  
+ Max.   :2874   Max.   :2874   Max.   :2874   Max.   :2874  
+ NA's   :11     NA's   :11     NA's   :11     NA's   :11    
+> print(summary(fits))
+  AccuracyBin        KappaBin       AccuracyTree      KappaTree     
+ Min.   :0.3254   Min.   :0.2592   Min.   :0.4400   Min.   :0.3931  
+ 1st Qu.:0.3301   1st Qu.:0.2639   1st Qu.:0.4471   1st Qu.:0.4010  
+ Median :0.3327   Median :0.2666   Median :0.4494   Median :0.4036  
+ Mean   :0.3324   Mean   :0.2663   Mean   :0.4492   Mean   :0.4035  
+ 3rd Qu.:0.3348   3rd Qu.:0.2686   3rd Qu.:0.4510   3rd Qu.:0.4056  
+ Max.   :0.3392   Max.   :0.2721   Max.   :0.4594   Max.   :0.4151  
+ NA's   :11       NA's   :11       NA's   :11       NA's   :11      
+ AccuracyLogit      KappaLogit     AccuracybinRough KappabinRough
+ Min.   :0.4373   Min.   :0.3899   Min.   :0        Min.   :0    
+ 1st Qu.:0.4450   1st Qu.:0.3982   1st Qu.:0        1st Qu.:0    
+ Median :0.4470   Median :0.4003   Median :0        Median :0    
+ Mean   :0.4469   Mean   :0.4002   Mean   :0        Mean   :0    
+ 3rd Qu.:0.4491   3rd Qu.:0.4024   3rd Qu.:0        3rd Qu.:0    
+ Max.   :0.4545   Max.   :0.4082   Max.   :0        Max.   :0    
+ NA's   :11       NA's   :11       NA's   :11       NA's   :11   
+> print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS             bin1B3          tree1B3          logit1B3     
+ Min.   :0.8821   Min.   :0.8627   Min.   :0.8647   Min.   :0.8589  
+ 1st Qu.:0.9057   1st Qu.:0.8873   1st Qu.:0.8875   1st Qu.:0.8843  
+ Median :0.9134   Median :0.8943   Median :0.8955   Median :0.8913  
+ Mean   :0.9136   Mean   :0.8949   Mean   :0.8953   Mean   :0.8912  
+ 3rd Qu.:0.9233   3rd Qu.:0.9026   3rd Qu.:0.9028   3rd Qu.:0.8983  
+ Max.   :0.9404   Max.   :0.9218   Max.   :0.9209   Max.   :0.9177  
+ NA's   :11       NA's   :11       NA's   :11       NA's   :11      
+  binRough1B3         bin2B3          tree2B3          logit2B3     
+ Min.   :0.8803   Min.   :0.8587   Min.   :0.8632   Min.   :0.8578  
+ 1st Qu.:0.9032   1st Qu.:0.8872   1st Qu.:0.8870   1st Qu.:0.8844  
+ Median :0.9112   Median :0.8944   Median :0.8950   Median :0.8900  
+ Mean   :0.9109   Mean   :0.8947   Mean   :0.8949   Mean   :0.8909  
+ 3rd Qu.:0.9201   3rd Qu.:0.9016   3rd Qu.:0.9013   3rd Qu.:0.8977  
+ Max.   :0.9380   Max.   :0.9207   Max.   :0.9210   Max.   :0.9176  
+ NA's   :11       NA's   :11       NA's   :11       NA's   :11      
+  binRough2B3    
+ Min.   :0.8785  
+ 1st Qu.:0.9029  
+ Median :0.9100  
+ Mean   :0.9100  
+ 3rd Qu.:0.9188  
+ Max.   :0.9378  
+ NA's   :11      
+> 
+> # Load mvn median results (bin two-iles for occupation excl. restr.)
+> # load('coeffs1e3MedCorrEps.Rda')
+> # load('Ns1e3MedCorrEps.Rda')
+> # load('fits1e3MedCorrEps.Rda')
+> # load('RMSEs1e3MedCorrEps.Rda')
+> 
+> # print(" ")
+> # print("corr tastes, two-iles")
+> # print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> # print(summary(fits))
+> # print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+> 
+> # Load mvn results (bin quartiles for occupation excl. restr.)
+> load('coeffs1e3CorrEpsCorrEta.Rda')
+> load('Ns1e3CorrEpsCorrEta.Rda')
+> load('fits1e3CorrEpsCorrEta.Rda')
+> load('RMSEs1e3CorrEpsCorrEta.Rda')
+> 
+> print(" ")
+[1] " "
+> print("corr tastes corr wages, quartiles")
+[1] "corr tastes corr wages, quartiles"
+> print(summary(coeffs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS            bin1B3         tree1B3         logit1B3    
+ Min.   :1.126   Min.   :1.595   Min.   :1.694   Min.   :1.805  
+ 1st Qu.:1.468   1st Qu.:1.820   1st Qu.:1.895   1st Qu.:2.036  
+ Median :1.529   Median :1.885   Median :1.980   Median :2.115  
+ Mean   :1.536   Mean   :1.880   Mean   :1.967   Mean   :2.113  
+ 3rd Qu.:1.627   3rd Qu.:1.945   3rd Qu.:2.031   3rd Qu.:2.190  
+ Max.   :1.781   Max.   :2.077   Max.   :2.178   Max.   :2.403  
+ NA's   :2       NA's   :2       NA's   :2       NA's   :2      
+  binRough1B3        bin2B3         tree2B3         logit2B3    
+ Min.   :1.468   Min.   :1.555   Min.   :1.673   Min.   :1.774  
+ 1st Qu.:1.745   1st Qu.:1.776   1st Qu.:1.864   1st Qu.:2.017  
+ Median :1.836   Median :1.886   Median :1.946   Median :2.152  
+ Mean   :1.831   Mean   :1.878   Mean   :1.950   Mean   :2.145  
+ 3rd Qu.:1.906   3rd Qu.:1.972   3rd Qu.:2.037   3rd Qu.:2.279  
+ Max.   :2.127   Max.   :2.099   Max.   :2.315   Max.   :2.519  
+ NA's   :2       NA's   :2       NA's   :2       NA's   :2      
+  binRough2B3    
+ Min.   :0.5689  
+ 1st Qu.:1.4926  
+ Median :1.7165  
+ Mean   :1.7119  
+ 3rd Qu.:1.9160  
+ Max.   :2.8110  
+ NA's   :2       
+> print(summary(Ns[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS           bin1B3        tree1B3        logit1B3     binRough1B3  
+ Min.   :2369   Min.   :2369   Min.   :2369   Min.   :2369   Min.   :2369  
+ 1st Qu.:2603   1st Qu.:2603   1st Qu.:2603   1st Qu.:2603   1st Qu.:2603  
+ Median :2678   Median :2678   Median :2678   Median :2678   Median :2678  
+ Mean   :2676   Mean   :2676   Mean   :2676   Mean   :2676   Mean   :2676  
+ 3rd Qu.:2740   3rd Qu.:2740   3rd Qu.:2740   3rd Qu.:2740   3rd Qu.:2740  
+ Max.   :2905   Max.   :2905   Max.   :2905   Max.   :2905   Max.   :2905  
+ NA's   :2      NA's   :2      NA's   :2      NA's   :2      NA's   :2     
+     bin2B3        tree2B3        logit2B3     binRough2B3  
+ Min.   :2369   Min.   :2369   Min.   :2369   Min.   :2369  
+ 1st Qu.:2603   1st Qu.:2603   1st Qu.:2603   1st Qu.:2603  
+ Median :2678   Median :2678   Median :2678   Median :2678  
+ Mean   :2676   Mean   :2676   Mean   :2676   Mean   :2676  
+ 3rd Qu.:2740   3rd Qu.:2740   3rd Qu.:2740   3rd Qu.:2740  
+ Max.   :2905   Max.   :2905   Max.   :2905   Max.   :2905  
+ NA's   :2      NA's   :2      NA's   :2      NA's   :2     
+> print(summary(fits))
+  AccuracyBin        KappaBin       AccuracyTree      KappaTree     
+ Min.   :0.3007   Min.   :0.2363   Min.   :0.4017   Min.   :0.3555  
+ 1st Qu.:0.3143   1st Qu.:0.2490   1st Qu.:0.4190   1st Qu.:0.3725  
+ Median :0.3175   Median :0.2521   Median :0.4233   Median :0.3771  
+ Mean   :0.3175   Mean   :0.2522   Mean   :0.4240   Mean   :0.3776  
+ 3rd Qu.:0.3213   3rd Qu.:0.2560   3rd Qu.:0.4303   3rd Qu.:0.3840  
+ Max.   :0.3301   Max.   :0.2635   Max.   :0.4492   Max.   :0.4023  
+ NA's   :2        NA's   :2        NA's   :2        NA's   :2       
+ AccuracyLogit      KappaLogit     AccuracybinRough KappabinRough
+ Min.   :0.3930   Min.   :0.3457   Min.   :0        Min.   :0    
+ 1st Qu.:0.4165   1st Qu.:0.3687   1st Qu.:0        1st Qu.:0    
+ Median :0.4209   Median :0.3737   Median :0        Median :0    
+ Mean   :0.4215   Mean   :0.3740   Mean   :0        Mean   :0    
+ 3rd Qu.:0.4279   3rd Qu.:0.3810   3rd Qu.:0        3rd Qu.:0    
+ Max.   :0.4453   Max.   :0.3987   Max.   :0        Max.   :0    
+ NA's   :2        NA's   :2        NA's   :2        NA's   :2    
+> print(summary(RMSEs[,c("OLS","bin1B3","tree1B3","logit1B3","binRough1B3","bin2B3","tree2B3","logit2B3","binRough2B3")]))
+      OLS             bin1B3          tree1B3          logit1B3     
+ Min.   :0.8112   Min.   :0.7999   Min.   :0.7987   Min.   :0.7966  
+ 1st Qu.:1.0270   1st Qu.:1.0063   1st Qu.:1.0052   1st Qu.:1.0024  
+ Median :1.0691   Median :1.0434   Median :1.0399   Median :1.0370  
+ Mean   :1.0679   Mean   :1.0427   Mean   :1.0424   Mean   :1.0374  
+ 3rd Qu.:1.1182   3rd Qu.:1.0858   3rd Qu.:1.0863   3rd Qu.:1.0773  
+ Max.   :1.2664   Max.   :1.2346   Max.   :1.2369   Max.   :1.2288  
+ NA's   :2        NA's   :2        NA's   :2        NA's   :2       
+  binRough1B3         bin2B3         tree2B3          logit2B3     
+ Min.   :0.8107   Min.   :0.800   Min.   :0.7996   Min.   :0.7967  
+ 1st Qu.:1.0233   1st Qu.:1.006   1st Qu.:1.0039   1st Qu.:1.0023  
+ Median :1.0617   Median :1.043   Median :1.0400   Median :1.0360  
+ Mean   :1.0639   Mean   :1.042   Mean   :1.0418   Mean   :1.0370  
+ 3rd Qu.:1.1131   3rd Qu.:1.086   3rd Qu.:1.0838   3rd Qu.:1.0777  
+ Max.   :1.2602   Max.   :1.233   Max.   :1.2364   Max.   :1.2286  
+ NA's   :2        NA's   :2       NA's   :2        NA's   :2       
+  binRough2B3    
+ Min.   :0.8099  
+ 1st Qu.:1.0220  
+ Median :1.0615  
+ Mean   :1.0628  
+ 3rd Qu.:1.1118  
+ Max.   :1.2600  
+ NA's   :2       
+> 
+> # Create matrix of results
+> baseline   <- data.frame(matrix(0,ncol=8,nrow=9))
+> corrEps    <- data.frame(matrix(0,ncol=8,nrow=9))
+> corrEpsEta <- data.frame(matrix(0,ncol=8,nrow=9))
+> T1EV       <- data.frame(matrix(0,ncol=8,nrow=9))
+> FE         <- data.frame(matrix(0,ncol=8,nrow=9))
+> row.names(baseline  ) <- c("[\\]quad OLS","[\\]quad 1st Best Bin","[\\]quad 1st Best Tree","[\\]quad 1st Best Logit","[\\]quad 1st Best Coarse Bin","[\\]quad 1st+2nd Best Bin","[\\]quad 1st+2nd Best Tree","[\\]quad 1st+2nd Best Logit","[\\]quad 1st+2nd Best Coarse Bin")
+> row.names(corrEps   ) <- c("[\\]quad OLS","[\\]quad 1st Best Bin","[\\]quad 1st Best Tree","[\\]quad 1st Best Logit","[\\]quad 1st Best Coarse Bin","[\\]quad 1st+2nd Best Bin","[\\]quad 1st+2nd Best Tree","[\\]quad 1st+2nd Best Logit","[\\]quad 1st+2nd Best Coarse Bin")
+> row.names(corrEpsEta) <- c("[\\]quad OLS","[\\]quad 1st Best Bin","[\\]quad 1st Best Tree","[\\]quad 1st Best Logit","[\\]quad 1st Best Coarse Bin","[\\]quad 1st+2nd Best Bin","[\\]quad 1st+2nd Best Tree","[\\]quad 1st+2nd Best Logit","[\\]quad 1st+2nd Best Coarse Bin")
+> row.names(T1EV)       <- c("[\\]quad OLS","[\\]quad 1st Best Bin","[\\]quad 1st Best Tree","[\\]quad 1st Best Logit","[\\]quad 1st Best Coarse Bin","[\\]quad 1st+2nd Best Bin","[\\]quad 1st+2nd Best Tree","[\\]quad 1st+2nd Best Logit","[\\]quad 1st+2nd Best Coarse Bin")
+> row.names(FE)         <- c("[\\]quad OLS","[\\]quad 1st Best Bin","[\\]quad 1st Best Tree","[\\]quad 1st Best Logit","[\\]quad 1st Best Coarse Bin","[\\]quad 1st+2nd Best Bin","[\\]quad 1st+2nd Best Tree","[\\]quad 1st+2nd Best Logit","[\\]quad 1st+2nd Best Coarse Bin")
+> 
+> 
+> #-----------------------
+> # Baseline simulation
+> #-----------------------
+> load('coeffs.Rda')
+> load('RMSEs.Rda')
+> load('Ns.Rda')
+> # OLS
+> baseline[1,1] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> baseline[1,2] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> baseline[1,3] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> baseline[1,4] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # Bin 1B
+> baseline[2,1] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> baseline[2,2] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> baseline[2,3] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> baseline[2,4] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # Tree 1B
+> baseline[3,1] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> baseline[3,2] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> baseline[3,3] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> baseline[3,4] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # Logit 1B
+> baseline[4,1] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> baseline[4,2] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> baseline[4,3] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> baseline[4,4] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # Bin Coarse 1B
+> baseline[5,1] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> baseline[5,2] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> baseline[5,3] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> baseline[5,4] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # Bin 2B
+> baseline[6,1] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> baseline[6,2] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> baseline[6,3] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> baseline[6,4] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # Tree 2B
+> baseline[7,1] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> baseline[7,2] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> baseline[7,3] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> baseline[7,4] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # Logit 2B
+> baseline[8,1] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> baseline[8,2] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> baseline[8,3] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> baseline[8,4] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # Bin Coarse 2B
+> baseline[9,1] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> baseline[9,2] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> baseline[9,3] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> baseline[9,4] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> print(baseline)
+                                          X1         X2        X3    X4 X5 X6
+[\\]quad OLS                     -0.37806900 0.03082026 0.8994222 28502  0  0
+[\\]quad 1st Best Bin            -0.04050209 0.03035697 0.8726352        0  0
+[\\]quad 1st Best Tree           -0.04060688 0.03028906 0.8704101        0  0
+[\\]quad 1st Best Logit           0.14580760 0.03357438 0.8686909        0  0
+[\\]quad 1st Best Coarse Bin     -0.14949843 0.03442598 0.8959407        0  0
+[\\]quad 1st+2nd Best Bin        -0.05870000 0.03320854 0.8723288        0  0
+[\\]quad 1st+2nd Best Tree       -0.04897053 0.03290925 0.8702085        0  0
+[\\]quad 1st+2nd Best Logit       0.15231475 0.04087815 0.8684361        0  0
+[\\]quad 1st+2nd Best Coarse Bin -0.38139225 0.11475790 0.8944314        0  0
+                                 X7 X8
+[\\]quad OLS                      0  0
+[\\]quad 1st Best Bin             0  0
+[\\]quad 1st Best Tree            0  0
+[\\]quad 1st Best Logit           0  0
+[\\]quad 1st Best Coarse Bin      0  0
+[\\]quad 1st+2nd Best Bin         0  0
+[\\]quad 1st+2nd Best Tree        0  0
+[\\]quad 1st+2nd Best Logit       0  0
+[\\]quad 1st+2nd Best Coarse Bin  0  0
+> 
+> load('coeffs1e3.Rda')
+> load('RMSEs1e3.Rda')
+> load('Ns1e3.Rda')
+> # OLS
+> baseline[1,5] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> baseline[1,6] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> baseline[1,7] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> baseline[1,8] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # Bin 1B
+> baseline[2,5] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> baseline[2,6] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> baseline[2,7] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> baseline[2,8] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # Tree 1B
+> baseline[3,5] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> baseline[3,6] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> baseline[3,7] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> baseline[3,8] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # Logit 1B
+> baseline[4,5] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> baseline[4,6] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> baseline[4,7] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> baseline[4,8] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # Bin Coarse 1B
+> baseline[5,5] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> baseline[5,6] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> baseline[5,7] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> baseline[5,8] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # Bin 2B
+> baseline[6,5] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> baseline[6,6] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> baseline[6,7] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> baseline[6,8] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # Tree 2B
+> baseline[7,5] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> baseline[7,6] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> baseline[7,7] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> baseline[7,8] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # Logit 2B
+> baseline[8,5] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> baseline[8,6] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> baseline[8,7] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> baseline[8,8] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # Bin Coarse 2B
+> baseline[9,5] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> baseline[9,6] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> baseline[9,7] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> baseline[9,8] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> 
+> 
+> #-----------------------
+> # Correlated pref shocks
+> #-----------------------
+> load('coeffsCorrEps.Rda')
+> load('RMSEsCorrEps.Rda')
+> load('NsCorrEps.Rda')
+> # OLS
+> corrEps[1,1] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> corrEps[1,2] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> corrEps[1,3] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> corrEps[1,4] = round(mean(    Ns[,c("OLS")], na.rm=TRUE),digits=0)
+> # Bin 1B
+> corrEps[2,1] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> corrEps[2,2] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> corrEps[2,3] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> corrEps[2,4] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # Tree 1B
+> corrEps[3,1] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> corrEps[3,2] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> corrEps[3,3] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> corrEps[3,4] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # Logit 1B
+> corrEps[4,1] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> corrEps[4,2] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> corrEps[4,3] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> corrEps[4,4] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # Bin Coarse 1B
+> corrEps[5,1] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> corrEps[5,2] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> corrEps[5,3] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> corrEps[5,4] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # Bin 2B
+> corrEps[6,1] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> corrEps[6,2] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> corrEps[6,3] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> corrEps[6,4] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # Tree 2B
+> corrEps[7,1] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> corrEps[7,2] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> corrEps[7,3] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> corrEps[7,4] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # Logit 2B
+> corrEps[8,1] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> corrEps[8,2] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> corrEps[8,3] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> corrEps[8,4] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # Bin Coarse 2B
+> corrEps[9,1] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> corrEps[9,2] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> corrEps[9,3] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> corrEps[9,4] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> 
+> load('coeffs1e3CorrEps.Rda')
+> load('RMSEs1e3CorrEps.Rda')
+> load('Ns1e3CorrEps.Rda')
+> # OLS
+> corrEps[1,5] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> corrEps[1,6] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> corrEps[1,7] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> corrEps[1,8] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # Bin 1B
+> corrEps[2,5] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> corrEps[2,6] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> corrEps[2,7] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> corrEps[2,8] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # Tree 1B
+> corrEps[3,5] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> corrEps[3,6] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> corrEps[3,7] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> corrEps[3,8] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # Logit 1B
+> corrEps[4,5] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> corrEps[4,6] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> corrEps[4,7] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> corrEps[4,8] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # Bin Coarse 1B
+> corrEps[5,5] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> corrEps[5,6] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> corrEps[5,7] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> corrEps[5,8] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # Bin 2B
+> corrEps[6,5] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> corrEps[6,6] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> corrEps[6,7] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> corrEps[6,8] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # Tree 2B
+> corrEps[7,5] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> corrEps[7,6] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> corrEps[7,7] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> corrEps[7,8] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # Logit 2B
+> corrEps[8,5] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> corrEps[8,6] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> corrEps[8,7] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> corrEps[8,8] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # Bin Coarse 2B
+> corrEps[9,5] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> corrEps[9,6] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> corrEps[9,7] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> corrEps[9,8] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> 
+> 
+> #-----------------------
+> # Correlated pref shocks and earnings shocks
+> #-----------------------
+> load('coeffsCorrEpsCorrEta.Rda')
+> load('RMSEsCorrEpsCorrEta.Rda')
+> load('NsCorrEpsCorrEta.Rda')
+> # OLS
+> corrEpsEta[1,1] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> corrEpsEta[1,2] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> corrEpsEta[1,3] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> corrEpsEta[1,4] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # Bin 1B
+> corrEpsEta[2,1] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> corrEpsEta[2,2] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> corrEpsEta[2,3] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> corrEpsEta[2,4] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # Tree 1B
+> corrEpsEta[3,1] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> corrEpsEta[3,2] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> corrEpsEta[3,3] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> corrEpsEta[3,4] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # Logit 1B
+> corrEpsEta[4,1] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> corrEpsEta[4,2] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> corrEpsEta[4,3] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> corrEpsEta[4,4] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # Bin Coarse 1B
+> corrEpsEta[5,1] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> corrEpsEta[5,2] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> corrEpsEta[5,3] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> corrEpsEta[5,4] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # Bin 2B
+> corrEpsEta[6,1] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> corrEpsEta[6,2] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> corrEpsEta[6,3] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> corrEpsEta[6,4] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # Tree 2B
+> corrEpsEta[7,1] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> corrEpsEta[7,2] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> corrEpsEta[7,3] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> corrEpsEta[7,4] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # Logit 2B
+> corrEpsEta[8,1] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> corrEpsEta[8,2] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> corrEpsEta[8,3] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> corrEpsEta[8,4] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # Bin Coarse 2B
+> corrEpsEta[9,1] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> corrEpsEta[9,2] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> corrEpsEta[9,3] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> corrEpsEta[9,4] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> 
+> load('coeffs1e3CorrEpsCorrEta.Rda')
+> load('RMSEs1e3CorrEpsCorrEta.Rda')
+> load('Ns1e3CorrEpsCorrEta.Rda')
+> # OLS
+> corrEpsEta[1,5] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> corrEpsEta[1,6] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> corrEpsEta[1,7] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> corrEpsEta[1,8] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # Bin 1B
+> corrEpsEta[2,5] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> corrEpsEta[2,6] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> corrEpsEta[2,7] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> corrEpsEta[2,8] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # Tree 1B
+> corrEpsEta[3,5] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> corrEpsEta[3,6] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> corrEpsEta[3,7] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> corrEpsEta[3,8] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # Logit 1B
+> corrEpsEta[4,5] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> corrEpsEta[4,6] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> corrEpsEta[4,7] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> corrEpsEta[4,8] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # Bin Coarse 1B
+> corrEpsEta[5,5] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> corrEpsEta[5,6] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> corrEpsEta[5,7] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> corrEpsEta[5,8] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # Bin 2B
+> corrEpsEta[6,5] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> corrEpsEta[6,6] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> corrEpsEta[6,7] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> corrEpsEta[6,8] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # Tree 2B
+> corrEpsEta[7,5] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> corrEpsEta[7,6] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> corrEpsEta[7,7] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> corrEpsEta[7,8] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # Logit 2B
+> corrEpsEta[8,5] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> corrEpsEta[8,6] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> corrEpsEta[8,7] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> corrEpsEta[8,8] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # Bin Coarse 2B
+> corrEpsEta[9,5] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> corrEpsEta[9,6] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> corrEpsEta[9,7] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> corrEpsEta[9,8] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> 
+> 
+> # #-----------------------
+> # # Logit preference shocks
+> # #-----------------------
+> # load('coeffsT1EV.Rda')
+> # load('RMSEsT1EV.Rda')
+> # load('NsT1EV.Rda')
+> # # OLS
+> # T1EV[1,1] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> # T1EV[1,2] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> # T1EV[1,3] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> # T1EV[1,4] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # # Bin 1B
+> # T1EV[2,1] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> # T1EV[2,2] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> # T1EV[2,3] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> # T1EV[2,4] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # # Tree 1B
+> # T1EV[3,1] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> # T1EV[3,2] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> # T1EV[3,3] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> # T1EV[3,4] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # # Logit 1B
+> # T1EV[4,1] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> # T1EV[4,2] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> # T1EV[4,3] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> # T1EV[4,4] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # # Bin Coarse 1B
+> # T1EV[5,1] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> # T1EV[5,2] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> # T1EV[5,3] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> # T1EV[5,4] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # # Bin 2B
+> # T1EV[6,1] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> # T1EV[6,2] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> # T1EV[6,3] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> # T1EV[6,4] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # # Tree 2B
+> # T1EV[7,1] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> # T1EV[7,2] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> # T1EV[7,3] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> # T1EV[7,4] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # # Logit 2B
+> # T1EV[8,1] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> # T1EV[8,2] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> # T1EV[8,3] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> # T1EV[8,4] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # # Bin Coarse 2B
+> # T1EV[9,1] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> # T1EV[9,2] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> # T1EV[9,3] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> # T1EV[9,4] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> # 
+> # load('coeffs1e3T1EV.Rda')
+> # load('RMSEs1e3T1EV.Rda')
+> # load('Ns1e3T1EV.Rda')
+> # # OLS
+> # T1EV[1,5] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> # T1EV[1,6] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> # T1EV[1,7] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> # T1EV[1,8] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # # Bin 1B
+> # T1EV[2,5] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> # T1EV[2,6] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> # T1EV[2,7] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> # T1EV[2,8] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # # Tree 1B
+> # T1EV[3,5] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> # T1EV[3,6] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> # T1EV[3,7] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> # T1EV[3,8] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # # Logit 1B
+> # T1EV[4,5] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> # T1EV[4,6] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> # T1EV[4,7] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> # T1EV[4,8] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # # Bin Coarse 1B
+> # T1EV[5,5] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> # T1EV[5,6] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> # T1EV[5,7] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> # T1EV[5,8] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # # Bin 2B
+> # T1EV[6,5] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> # T1EV[6,6] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> # T1EV[6,7] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> # T1EV[6,8] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # # Tree 2B
+> # T1EV[7,5] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> # T1EV[7,6] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> # T1EV[7,7] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> # T1EV[7,8] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # # Logit 2B
+> # T1EV[8,5] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> # T1EV[8,6] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> # T1EV[8,7] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> # T1EV[8,8] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # # Bin Coarse 2B
+> # T1EV[9,5] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> # T1EV[9,6] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> # T1EV[9,7] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> # T1EV[9,8] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> # 
+> # 
+> # #-----------------------
+> # # FE factor loading
+> # #-----------------------
+> # load('coeffsFE.Rda')
+> # load('RMSEsFE.Rda')
+> # load('NsFE.Rda')
+> # # OLS
+> # FE[1,1] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> # FE[1,2] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> # FE[1,3] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> # FE[1,4] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # # Bin 1B
+> # FE[2,1] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> # FE[2,2] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> # FE[2,3] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> # FE[2,4] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # # Tree 1B
+> # FE[3,1] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> # FE[3,2] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> # FE[3,3] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> # FE[3,4] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # # Logit 1B
+> # FE[4,1] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> # FE[4,2] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> # FE[4,3] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> # FE[4,4] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # # Bin Coarse 1B
+> # FE[5,1] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> # FE[5,2] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> # FE[5,3] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> # FE[5,4] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # # Bin 2B
+> # FE[6,1] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> # FE[6,2] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> # FE[6,3] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> # FE[6,4] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # # Tree 2B
+> # FE[7,1] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> # FE[7,2] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> # FE[7,3] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> # FE[7,4] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # # Logit 2B
+> # FE[8,1] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> # FE[8,2] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> # FE[8,3] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> # FE[8,4] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # # Bin Coarse 2B
+> # FE[9,1] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> # FE[9,2] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> # FE[9,3] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> # FE[9,4] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> # 
+> # load('coeffs1e3FE.Rda')
+> # load('RMSEs1e3FE.Rda')
+> # load('Ns1e3FE.Rda')
+> # # OLS
+> # FE[1,5] = mean(coeffs[,c("OLS")], na.rm=TRUE)-2
+> # FE[1,6] = sd(  coeffs[,c("OLS")], na.rm=TRUE)
+> # FE[1,7] = mean( RMSEs[,c("OLS")], na.rm=TRUE)
+> # FE[1,8] = round(mean(    Ns[,c("OLS")], na.rm=TRUE), digits=0)
+> # # Bin 1B
+> # FE[2,5] = mean(coeffs[,c("bin1B3")], na.rm=TRUE)-2
+> # FE[2,6] = sd(  coeffs[,c("bin1B3")], na.rm=TRUE)
+> # FE[2,7] = mean( RMSEs[,c("bin1B3")], na.rm=TRUE)
+> # FE[2,8] = "" #mean(    Ns[,c("bin1B3")], na.rm=TRUE)
+> # # Tree 1B
+> # FE[3,5] = mean(coeffs[,c("tree1B3")], na.rm=TRUE)-2
+> # FE[3,6] = sd(  coeffs[,c("tree1B3")], na.rm=TRUE)
+> # FE[3,7] = mean( RMSEs[,c("tree1B3")], na.rm=TRUE)
+> # FE[3,8] = "" #mean(    Ns[,c("tree1B3")], na.rm=TRUE)
+> # # Logit 1B
+> # FE[4,5] = mean(coeffs[,c("logit1B3")], na.rm=TRUE)-2
+> # FE[4,6] = sd(  coeffs[,c("logit1B3")], na.rm=TRUE)
+> # FE[4,7] = mean( RMSEs[,c("logit1B3")], na.rm=TRUE)
+> # FE[4,8] = "" #mean(    Ns[,c("logit1B3")], na.rm=TRUE)
+> # # Bin Coarse 1B
+> # FE[5,5] = mean(coeffs[,c("binRough1B3")], na.rm=TRUE)-2
+> # FE[5,6] = sd(  coeffs[,c("binRough1B3")], na.rm=TRUE)
+> # FE[5,7] = mean( RMSEs[,c("binRough1B3")], na.rm=TRUE)
+> # FE[5,8] = "" #mean(    Ns[,c("binRough1B3")], na.rm=TRUE)
+> # # Bin 2B
+> # FE[6,5] = mean(coeffs[,c("bin2B3")], na.rm=TRUE)-2
+> # FE[6,6] = sd(  coeffs[,c("bin2B3")], na.rm=TRUE)
+> # FE[6,7] = mean( RMSEs[,c("bin2B3")], na.rm=TRUE)
+> # FE[6,8] = "" #mean(    Ns[,c("bin2B3")], na.rm=TRUE)
+> # # Tree 2B
+> # FE[7,5] = mean(coeffs[,c("tree2B3")], na.rm=TRUE)-2
+> # FE[7,6] = sd(  coeffs[,c("tree2B3")], na.rm=TRUE)
+> # FE[7,7] = mean( RMSEs[,c("tree2B3")], na.rm=TRUE)
+> # FE[7,8] = "" #mean(    Ns[,c("tree2B3")], na.rm=TRUE)
+> # # Logit 2B
+> # FE[8,5] = mean(coeffs[,c("logit2B3")], na.rm=TRUE)-2
+> # FE[8,6] = sd(  coeffs[,c("logit2B3")], na.rm=TRUE)
+> # FE[8,7] = mean( RMSEs[,c("logit2B3")], na.rm=TRUE)
+> # FE[8,8] = "" #mean(    Ns[,c("logit2B3")], na.rm=TRUE)
+> # # Bin Coarse 2B
+> # FE[9,5] = mean(coeffs[,c("binRough2B3")], na.rm=TRUE)-2
+> # FE[9,6] = sd(  coeffs[,c("binRough2B3")], na.rm=TRUE)
+> # FE[9,7] = mean( RMSEs[,c("binRough2B3")], na.rm=TRUE)
+> # FE[9,8] = "" #mean(    Ns[,c("binRough2B3")], na.rm=TRUE)
+> 
+> 
+> #-----------------------
+> # Print results
+> #-----------------------
+> print(xtable(baseline  , digits=4),include.rownames=T, sanitize.rownames.function=identity)
+% latex table generated in R 4.0.0 by xtable 1.8-4 package
+% Fri Jan 22 17:21:56 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrlrrrl}
+  \hline
+ & X1 & X2 & X3 & X4 & X5 & X6 & X7 & X8 \\ 
+  \hline
+[\]quad OLS & -0.3781 & 0.0308 & 0.8994 & 28502 & -0.3819 & 0.0984 & 0.8974 & 2857 \\ 
+  [\]quad 1st Best Bin & -0.0405 & 0.0304 & 0.8726 &  & -0.0719 & 0.0967 & 0.8724 &  \\ 
+  [\]quad 1st Best Tree & -0.0406 & 0.0303 & 0.8704 &  & 0.0256 & 0.0998 & 0.8721 &  \\ 
+  [\]quad 1st Best Logit & 0.1458 & 0.0336 & 0.8687 &  & 0.1401 & 0.1045 & 0.8675 &  \\ 
+  [\]quad 1st Best Coarse Bin & -0.1495 & 0.0344 & 0.8959 &  & -0.1611 & 0.1071 & 0.8942 &  \\ 
+  [\]quad 1st+2nd Best Bin & -0.0587 & 0.0332 & 0.8723 &  & -0.0915 & 0.1047 & 0.8720 &  \\ 
+  [\]quad 1st+2nd Best Tree & -0.0490 & 0.0329 & 0.8702 &  & 0.0125 & 0.1063 & 0.8716 &  \\ 
+  [\]quad 1st+2nd Best Logit & 0.1523 & 0.0409 & 0.8684 &  & 0.1734 & 0.1248 & 0.8673 &  \\ 
+  [\]quad 1st+2nd Best Coarse Bin & -0.3814 & 0.1148 & 0.8944 &  & -0.2557 & 0.2826 & 0.8931 &  \\ 
+   \hline
+\end{tabular}
+\end{table}
+> print(xtable(corrEps   , digits=4),include.rownames=T, sanitize.rownames.function=identity)
+% latex table generated in R 4.0.0 by xtable 1.8-4 package
+% Fri Jan 22 17:21:56 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrlrrrl}
+  \hline
+ & X1 & X2 & X3 & X4 & X5 & X6 & X7 & X8 \\ 
+  \hline
+[\]quad OLS & -0.3405 & 0.0311 & 0.9123 & 27504 & -0.3061 & 0.0870 & 0.9136 & 2755 \\ 
+  [\]quad 1st Best Bin & -0.0384 & 0.0340 & 0.8929 &  & -0.0418 & 0.0874 & 0.8949 &  \\ 
+  [\]quad 1st Best Tree & -0.0408 & 0.0323 & 0.8916 &  & 0.0269 & 0.0896 & 0.8953 &  \\ 
+  [\]quad 1st Best Logit & 0.1152 & 0.0361 & 0.8903 &  & 0.1406 & 0.0905 & 0.8912 &  \\ 
+  [\]quad 1st Best Coarse Bin & -0.1181 & 0.0372 & 0.9095 &  & -0.1003 & 0.0967 & 0.9109 &  \\ 
+  [\]quad 1st+2nd Best Bin & -0.0549 & 0.0376 & 0.8927 &  & -0.0526 & 0.1042 & 0.8947 &  \\ 
+  [\]quad 1st+2nd Best Tree & -0.0530 & 0.0338 & 0.8914 &  & 0.0102 & 0.1075 & 0.8949 &  \\ 
+  [\]quad 1st+2nd Best Logit & 0.1131 & 0.0431 & 0.8901 &  & 0.1622 & 0.1325 & 0.8909 &  \\ 
+  [\]quad 1st+2nd Best Coarse Bin & -0.3263 & 0.1149 & 0.9085 &  & -0.1940 & 0.2781 & 0.9100 &  \\ 
+   \hline
+\end{tabular}
+\end{table}
+> print(xtable(corrEpsEta, digits=4),include.rownames=T, sanitize.rownames.function=identity)
+% latex table generated in R 4.0.0 by xtable 1.8-4 package
+% Fri Jan 22 17:21:56 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrlrrrl}
+  \hline
+ & X1 & X2 & X3 & X4 & X5 & X6 & X7 & X8 \\ 
+  \hline
+[\]quad OLS & -0.4596 & 0.0943 & 1.0715 & 26613 & -0.4638 & 0.1266 & 1.0679 & 2676 \\ 
+  [\]quad 1st Best Bin & -0.0572 & 0.0513 & 1.0437 &  & -0.1202 & 0.1031 & 1.0427 &  \\ 
+  [\]quad 1st Best Tree & -0.0616 & 0.0505 & 1.0419 &  & -0.0326 & 0.1089 & 1.0424 &  \\ 
+  [\]quad 1st Best Logit & 0.1334 & 0.0554 & 1.0400 &  & 0.1130 & 0.1145 & 1.0374 &  \\ 
+  [\]quad 1st Best Coarse Bin & -0.1297 & 0.0662 & 1.0670 &  & -0.1687 & 0.1325 & 1.0639 &  \\ 
+  [\]quad 1st+2nd Best Bin & -0.0768 & 0.0534 & 1.0433 &  & -0.1217 & 0.1218 & 1.0422 &  \\ 
+  [\]quad 1st+2nd Best Tree & -0.0757 & 0.0527 & 1.0416 &  & -0.0496 & 0.1292 & 1.0418 &  \\ 
+  [\]quad 1st+2nd Best Logit & 0.1329 & 0.0598 & 1.0397 &  & 0.1453 & 0.1685 & 1.0370 &  \\ 
+  [\]quad 1st+2nd Best Coarse Bin & -0.4195 & 0.1352 & 1.0658 &  & -0.2881 & 0.3828 & 1.0628 &  \\ 
+   \hline
+\end{tabular}
+\end{table}
+> # print(xtable(T1EV      , digits=4),include.rownames=T, sanitize.rownames.function=identity)
+> # print(xtable(FE        , digits=4),include.rownames=T, sanitize.rownames.function=identity)
+>  
+> # print(xtable(df, display = c("s","e","e")),format.args = list(digits = 3, big.mark = " ", decimal.mark = ","))
+> 
+> proc.time()
+   user  system elapsed 
+ 38.031   4.386  45.732 

@@ -1,5 +1,5 @@
 # AES-Roy-Majors
-This repository provides replication files for the paper "Selective Migration, Occupational Choice, and the Wage Returns to College Majors" written by Tyler Ransom and published in *Annals of Economics and Statistics* in 2021.
+This repository provides replication files for the paper "Selective Migration, Occupational Choice, and the Wage Returns to College Majors" written by Tyler Ransom and published in *Annals of Economics and Statistics* in 2021. The paper is available [here](https://www.jstor.org/stable/10.15609/annaeconstat2009.142.0045#metadata_info_tab_contents).
 
 ## System requirements
 - R version 4.0.x
